@@ -1315,6 +1315,10 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     [_gridController.view layoutIfNeeded];
     [_gridController adjustOffsetsAsRequired];
     
+    //Customize Back Button
+    [self.navigationItem setHidesBackButton:NO];
+    self.navigationItem.leftBarButtonItem = nil;
+    
     // Hide action button on nav bar if it exists
     if (self.navigationItem.rightBarButtonItem == _actionButton) {
         _gridPreviousRightNavItem = _actionButton;
@@ -1351,6 +1355,11 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     if (_gridPreviousRightNavItem == _actionButton && _actionButton) {
         [self.navigationItem setRightBarButtonItem:_gridPreviousRightNavItem animated:YES];
     }
+    
+    //Customize Back Button
+    [self.navigationItem setHidesBackButton:YES];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(showGridAnimated)];
+    self.navigationItem.leftBarButtonItem = backButton;
     
     // Position prior to hide animation
     CGRect newPagingFrame = [self frameForPagingScrollView];
