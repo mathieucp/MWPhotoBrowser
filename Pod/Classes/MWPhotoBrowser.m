@@ -64,7 +64,8 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     _previousLayoutBounds = CGRectZero;
     _currentPageIndex = 0;
     _previousPageIndex = NSUIntegerMax;
-    _displayActionButton = YES;
+    _displayActionButton = NO;
+    _displayDeleteButton = YES;
     _displayNavArrows = NO;
     _zoomPhotosToFill = YES;
     _performingLayout = NO; // Reset on view did appear
@@ -190,6 +191,10 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonPressed:)];
     }
     
+    if (self.displayDeleteButton) {
+        _deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteButtonPressed:)];
+    }
+    
     // Update
     [self reloadData];
     
@@ -250,14 +255,30 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
     NSMutableArray *items = [[NSMutableArray alloc] init];
 
+    /*
     // Left button - Grid
     if (_enableGrid) {
         hasItems = YES;
+        //Disable Grid Button
         [items addObject:[[UIBarButtonItem alloc] initWithImage:[UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/UIBarButtonItemGrid" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]] style:UIBarButtonItemStylePlain target:self action:@selector(showGridAnimated)]];
     } else {
         [items addObject:fixedSpace];
     }
-
+    */
+    
+    //Left button - Action
+    if (_actionButton) {
+        hasItems = YES;
+        [items addObject:_actionButton];
+    } else {
+        // We're not showing the toolbar so try and show in top right
+        //Disable display on nav bar
+        //if (_actionButton)
+        //    self.navigationItem.rightBarButtonItem = _actionButton;
+        
+        [items addObject:fixedSpace];
+    }
+    
     // Middle - Nav
     if (_previousButton && _nextButton && numberOfPhotos > 1) {
         hasItems = YES;
@@ -269,14 +290,11 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     } else {
         [items addObject:flexSpace];
     }
-
-    // Right - Action
-    if (_actionButton && !(!hasItems && !self.navigationItem.rightBarButtonItem)) {
-        [items addObject:_actionButton];
+    
+    //Right - Delete
+    if (_deleteButton) {
+        [items addObject:_deleteButton];
     } else {
-        // We're not showing the toolbar so try and show in top right
-        if (_actionButton)
-            self.navigationItem.rightBarButtonItem = _actionButton;
         [items addObject:fixedSpace];
     }
 
@@ -1544,6 +1562,30 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     }
 }
 
+- (void)deleteCurrentPhoto {
+    [self deletePhotoAtIndex:_currentPageIndex];
+    NSLog(@"Delete photo at index: %lu", _currentPageIndex);
+}
+
+- (void)deletePhotoAtIndex:(NSUInteger)index {
+    // Validate
+    NSUInteger photoCount = [self numberOfPhotos];
+    if (photoCount == 0) {
+        index = 0;
+    } else {
+        if (index >= photoCount)
+            index = [self numberOfPhotos]-1;
+    }
+    NSLog(@"Photos count: %lu", _photos.count);
+    
+    
+    [_photos removeObjectAtIndex:index];
+    [_thumbPhotos removeObjectAtIndex:index];
+    
+    NSLog(@"Photos count 2: %lu", _photos.count);
+    [self reloadData];
+}
+
 #pragma mark - Misc
 
 - (void)doneButtonPressed:(id)sender {
@@ -1570,6 +1612,22 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 }
 
 #pragma mark - Actions
+
+- (void)deleteButtonPressed:(id)sender {
+    // Only react when image has loaded
+    id <MWPhoto> photo = [self photoAtIndex:_currentPageIndex];
+    if ([self numberOfPhotos] > 0 && [photo underlyingImage]) {
+        
+        // If they have defined a delegate method then just message them
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:deleteButtonPressedForPhotoAtIndex:)]) {
+            [self.delegate photoBrowser:self deleteButtonPressedForPhotoAtIndex:_currentPageIndex];
+            
+            if ([self numberOfPhotos] == 0) {
+                [self showGridAnimated];
+            }
+        }
+    }
+}
 
 - (void)actionButtonPressed:(id)sender {
 

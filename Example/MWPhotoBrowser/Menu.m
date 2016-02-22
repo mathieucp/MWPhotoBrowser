@@ -11,6 +11,12 @@
 #import "SDImageCache.h"
 #import "MWCommon.h"
 
+@interface Menu()
+
+@property (nonatomic, strong) MWPhotoBrowser *browser;
+
+@end
+
 @implementation Menu
 
 #pragma mark -
@@ -1125,6 +1131,8 @@
     browser.autoPlayOnAppear = autoPlayOnAppear;
     [browser setCurrentPhotoIndex:0];
     
+    _browser = browser;
+    
     // Test custom selection images
 //    browser.customImageSelectedIconName = @"ImageSelected.png";
 //    browser.customImageSelectedSmallIconName = @"ImageSelectedSmall.png";
@@ -1140,7 +1148,7 @@
     // Show
     if (_segmentedControl.selectedSegmentIndex == 0) {
         // Push
-        [self.navigationController pushViewController:browser animated:YES];
+        [self.navigationController pushViewController:_browser animated:YES];
     } else {
         // Modal
         UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
@@ -1181,6 +1189,10 @@
 
 }
 
+- (void)changeEditingMode {
+    _browser.displaySelectionButtons = YES;
+}
+
 #pragma mark - MWPhotoBrowserDelegate
 
 - (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
@@ -1209,6 +1221,13 @@
 //    NSLog(@"ACTION!");
 //}
 
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser deleteButtonPressedForPhotoAtIndex:(NSUInteger)index {
+    [_photos removeObjectAtIndex:index];
+    [_thumbs removeObjectAtIndex:index];
+    
+    [photoBrowser reloadData];
+}
+
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
     NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
 }
@@ -1231,6 +1250,7 @@
     NSLog(@"Did finish modal presentation");
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 #pragma mark - Load Assets
 
