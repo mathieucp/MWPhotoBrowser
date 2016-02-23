@@ -1383,6 +1383,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     //Customize Back Button
     [self.navigationItem setHidesBackButton:YES];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(showGridAnimated)];
+    [backButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateNormal];
     self.navigationItem.leftBarButtonItem = backButton;
     
     // Position prior to hide animation
