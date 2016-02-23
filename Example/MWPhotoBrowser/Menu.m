@@ -1133,6 +1133,17 @@
     browser.backBarButtonItemTitle = @"Albums";
     browser.navigationBarTintColor = [UIColor whiteColor];
     
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [[UIColor colorWithRed:0.212 green:0.278 blue:0.31 alpha:0.8] CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *transparentImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    browser.toolbarTintColor = [UIColor whiteColor];
+    browser.toolbarBackgroundImage = transparentImage;
+    
     _browser = browser;
     
     // Test custom selection images
