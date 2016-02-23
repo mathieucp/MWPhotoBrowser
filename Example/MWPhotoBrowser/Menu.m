@@ -1130,6 +1130,7 @@
     browser.enableSwipeToDismiss = NO;
     browser.autoPlayOnAppear = autoPlayOnAppear;
     [browser setCurrentPhotoIndex:0];
+    browser.backBarButtonItemTitle = @"Albums";
     
     _browser = browser;
     

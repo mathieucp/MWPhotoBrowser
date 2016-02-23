@@ -60,6 +60,9 @@
 @property (nonatomic, strong) NSString *customImageSelectedIconName;
 @property (nonatomic, strong) NSString *customImageSelectedSmallIconName;
 
+//Customize BackBarButtonItem Title
+@property (nonatomic, strong) NSString *backBarButtonItemTitle;
+
 // Customize Appearance
 @property (nonatomic, assign) UIBarStyle navigationBarStyle;
 @property (nonatomic, strong) UIColor *navigationBarTintColor;
