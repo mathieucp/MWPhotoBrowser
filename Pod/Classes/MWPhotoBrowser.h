@@ -66,6 +66,7 @@
 // Customize Appearance
 @property (nonatomic, assign) UIBarStyle navigationBarStyle;
 @property (nonatomic, strong) UIColor *navigationBarTintColor;
+@property (nonatomic, strong) UIColor *navigationBarBarTintColor;
 @property (nonatomic, strong) UIImage *navigationBarBackgroundImage;
 @property (nonatomic, assign) UIBarStyle toolbarBarStyle;
 @property (nonatomic, strong) UIColor *toolbarTintColor;

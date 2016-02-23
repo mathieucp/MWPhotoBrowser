@@ -1131,6 +1131,7 @@
     browser.autoPlayOnAppear = autoPlayOnAppear;
     [browser setCurrentPhotoIndex:0];
     browser.backBarButtonItemTitle = @"Albums";
+    browser.navigationBarTintColor = [UIColor whiteColor];
     
     _browser = browser;
     

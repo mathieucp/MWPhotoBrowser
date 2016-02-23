@@ -86,6 +86,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     //Customize Appearance
     _navigationBarStyle = UIBarStyleDefault;
     _navigationBarTintColor = nil;
+    _navigationBarBarTintColor = nil;
     _navigationBarBackgroundImage = nil;
     _toolbarBarStyle = UIBarStyleDefault;
     _toolbarTintColor = nil;
@@ -471,7 +472,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     UINavigationBar *navBar = self.navigationController.navigationBar;
     navBar.tintColor = _navigationBarTintColor;
-    navBar.barTintColor = nil;
+    navBar.barTintColor = _navigationBarBarTintColor;
     navBar.shadowImage = nil;
     navBar.translucent = YES;
     navBar.barStyle = _navigationBarStyle;
