@@ -1136,14 +1136,20 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	_previousButton.enabled = (_currentPageIndex > 0);
 	_nextButton.enabled = (_currentPageIndex < numberOfPhotos - 1);
     
-    // Disable action button if there is no image or it's a video
+    // Disable action, delete button if there is no image or it's a video
     MWPhoto *photo = [self photoAtIndex:_currentPageIndex];
     if ([photo underlyingImage] == nil || ([photo respondsToSelector:@selector(isVideo)] && photo.isVideo)) {
         _actionButton.enabled = NO;
         _actionButton.tintColor = [UIColor clearColor]; // Tint to hide button
+        
+        _deleteButton.enabled = NO;
+        _deleteButton.tintColor = [UIColor clearColor];
     } else {
         _actionButton.enabled = YES;
         _actionButton.tintColor = nil;
+        
+        _deleteButton.enabled = YES;
+        _deleteButton.tintColor = nil;
     }
 	
 }
