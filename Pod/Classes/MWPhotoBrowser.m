@@ -1558,6 +1558,15 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 
 #pragma mark - Properties
 
+- (void)setDisplaySelectionButtons:(BOOL)displaySelectionButtons {
+    _displaySelectionButtons = displaySelectionButtons;
+    if (_gridController) {
+        _gridController.selectionMode = displaySelectionButtons;
+        [_gridController.collectionView reloadData];
+        [self tilePages];
+    }
+}
+
 - (void)setCurrentPhotoIndex:(NSUInteger)index {
     // Validate
     NSUInteger photoCount = [self numberOfPhotos];
